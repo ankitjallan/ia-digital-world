@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IA Digital Kit</title>
+<style>
+:root{--navy:#0F2240;--gold:#C9A227;--ink:#1A1F2B;--muted:#5B6476;--bg:#F4F6FA;--card:#fff;--line:#D9DEE8;--code:#0E1A2F;--codefg:#E8EDF7;--link:#1F5FBF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#E6EAF2;--muted:#A4AEC2;--bg:#0B1322;--card:#121D33;--line:#24314D;--link:#7FB0FF}}
+:root[data-theme="dark"]{--ink:#E6EAF2;--muted:#A4AEC2;--bg:#0B1322;--card:#121D33;--line:#24314D;--link:#7FB0FF}
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:12px 16px;font-size:14px}header b{color:var(--gold)}
+main{max-width:960px;margin:0 auto;padding:24px 16px 60px}h1{margin:.2em 0;font-size:30px}
+h2{margin-top:34px;border-bottom:2px solid var(--gold);padding-bottom:4px}
+.note{background:var(--card);border-left:5px solid #1E8449;padding:10px 14px;border-radius:6px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;background:var(--card)}
+td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}th{background:var(--navy);color:#fff}
+a{color:var(--link)}code{font-size:14px}
+.p{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0;position:relative}
+.p h3{margin:0 70px 8px 0;font-size:17px}
+pre{background:var(--code);color:var(--codefg);padding:12px;border-radius:8px;white-space:pre-wrap;word-break:break-word;font-size:14px;margin:0}
+.copy{position:absolute;top:10px;right:12px;background:var(--gold);border:0;border-radius:5px;padding:5px 10px;font-weight:700;cursor:pointer;color:var(--navy)}
+</style></head><body>
+<header><b>CA. Ankit Jallan</b> | Internal Audit in a Digital World | 10-10-26</header>
+<main>
+<h1>Internal Audit in a Digital World: the kit</h1>
+<p>Prompt library, synthetic datasets, Excel toolkits and Python tools from the Guwahati session.</p>
+<p class="note"><b>All data here is synthetic.</b> The companies, people, PAN, GSTIN, mobile and account numbers are fictitious. Before using any prompt with real client data, minimise and mask it (DPDP Act 2023) and use a business-grade AI account.</p>
+<h2>Downloads</h2>
+<div class="tw"><table><tr><th>Industry</th><th>Dataset</th><th>Python tool</th></tr>
+<tr><td>Aluminium (Brahmaputra Alu Systems)</td><td><a href="datasets/01_Aluminium_Brahmaputra_Alu_Systems.xlsx">xlsx</a></td><td><a href="tools/aluminium_audit.py">aluminium_audit.py</a></td></tr>
+<tr><td>Co-op Bank (Luit Valley UCB)</td><td><a href="datasets/02_CoopBank_Luit_Valley_UCB.xlsx">xlsx</a></td><td><a href="tools/bank_audit.py">bank_audit.py</a></td></tr>
+<tr><td>Hospital (Lohit Care)</td><td><a href="datasets/03_Hospital_Lohit_Care.xlsx">xlsx</a></td><td><a href="tools/hospital_audit.py">hospital_audit.py</a></td></tr>
+<tr><td>FMCG-Pharma (Siang Distributors)</td><td><a href="datasets/04_FMCG_Pharma_Siang_Distributors.xlsx">xlsx</a></td><td><a href="tools/pharma_audit.py">pharma_audit.py</a></td></tr></table></div>
+<p><b>Excel toolkits</b> (formulas only, Excel 2010+): <a href="excel_tools/Excel_IA_Toolkit_Aluminium.xlsx">Aluminium</a> · <a href="excel_tools/Excel_IA_Toolkit_Bank_Hospital_Pharma.xlsx">Bank-Hospital-Pharma</a><br>
+<b>Python helpers:</b> <a href="tools/common.py">common.py</a> (needed by every tool) · <a href="tools/dpdp_mask.py">dpdp_mask.py</a> (DPDP masker) · <a href="tools/README.md">README</a></p>
+<p>Python setup: <code>pip install pandas openpyxl numpy</code>. Keep <code>datasets/</code> and <code>tools/</code> side by side, then run <code>python tools/aluminium_audit.py</code>. Reports appear in <code>outputs/</code>.</p>
+<p><b>Challenge:</b> exceptions are hidden in each dataset. Find them with the prompts or the tools before you open the reports.</p>
+<h2>Prompt library</h2>
+<p>Replace the facts with your client's, and verify every output.</p>
+<article class="p"><h3>1. Understand the business before the first voucher</h3><button class="copy">Copy</button><pre>You are a senior internal auditor (Chartered Accountant) in Guwahati.
+Client: a private limited company that buys aluminium billets, extrudes sections, and sells
+ACP panels, office partitions, sliding/casement windows and doors to dealers and builders
+across Assam and the North East. Turnover approx Rs 60 crore. Accounting in Tally.
+
+1. Explain the business cycle from billet purchase to installation in 8-10 steps.
+2. For each step list the key internal-audit risks specific to THIS industry
+   (e.g. yield/scrap, LME-linked pricing, site installation billing, dealer credit).
+3. Give the 10 data fields I should request from Tally/ERP for each step.
+Output as a table: Step | Risks | Data to request | Suggested analytics test.
+If you are unsure about any industry norm, say so instead of guessing.</pre></article>
+<article class="p"><h3>2. Risk-control matrix &amp; audit programme in one pass</h3><button class="copy">Copy</button><pre>Using the risks you identified, prepare a Risk &amp; Control Matrix for the
+Procure-to-Pay cycle of the aluminium client.
+Columns: Risk ID | Risk | Likelihood (H/M/L) | Impact (H/M/L) | Expected control |
+Control type (preventive/detective, manual/automated) | Test of control |
+Substantive / data-analytics test | Data source (Tally report / ERP table).
+
+Then convert it into an internal audit programme aligned to ICAI Standards on
+Internal Audit: objective, scope, procedures, sample/100% approach, evidence to
+retain in working papers. Company policies: GM can approve payments up to
+Rs 2 lakh, above that Director; vendor creation needs PAN + GSTIN + cancelled cheque.</pre></article>
+<article class="p"><h3>3. Ask Claude to analyse the data you uploaded</h3><button class="copy">Copy</button><pre>Attached: Sales_Register and Customer_Master for FY 2025-26
+(synthetic / masked). Company policy: maximum trade discount 5%;
+office closed Sundays; financial year ends 31-Mar-2026.
+
+Act as an internal auditor. Test 100% of invoices for:
+a) discount above policy, and which salesperson gives it
+b) invoices dated on Sundays
+c) duplicates (same customer, date, item, qty, value)
+d) gaps in invoice numbering
+e) cut-off: invoiced in March but dispatched in April
+f) inter-state supply charged CGST+SGST instead of IGST
+Show each exception list as a table with invoice numbers, then a
+summary of patterns. State exactly how you tested each one.</pre></article>
+<article class="p"><h3>4. Policy / SOP gap review against best practice</h3><button class="copy">Copy</button><pre>Attached is the client&#x27;s &quot;Purchase &amp; Vendor Management Policy&quot; (8 pages).
+1. Compare it with good practice for a manufacturing SME in India:
+   vendor onboarding (PAN/GSTIN validation, bank verification, related-party
+   declaration), segregation of duties, approval matrix, 3-way match,
+   rate contracts for commodity inputs linked to market benchmarks.
+2. List gaps as: Policy clause | Gap | Risk | Recommended wording.
+3. Flag clauses that conflict with each other.
+4. Draft 5 questions I should ask the purchase head in the walkthrough.
+Quote the exact clause numbers from the document; do not paraphrase as if quoted.</pre></article>
+<article class="p"><h3>5. Reading invoices, e-way bills and agreements</h3><button class="copy">Copy</button><pre>Attached are 12 scanned purchase invoices and e-way bills
+for aluminium billets.
+Extract into a table: Supplier | GSTIN | Invoice no | Date |
+Item | Qty (kg) | Rate | Taxable | GST | E-way bill no |
+Vehicle no | Distance.
+Then flag: GSTIN format errors, invoice date after e-way bill
+date, qty mismatch between invoice and e-way bill, rate
+outside Rs 245-275/kg, the same vehicle used on the same day
+for two far-apart deliveries.</pre></article>
+<article class="p"><h3>6. Reading invoices, e-way bills and agreements</h3><button class="copy">Copy</button><pre>Attached: installation contract with a builder for
+aluminium windows at a residential project (14 pages).
+Summarise: scope, rates, escalation clause (LME-linked?),
+milestone billing, retention money, defect liability period,
+liquidated damages, payment terms, termination.
+Then tell me which audit tests apply: unbilled milestones,
+retention receivable ageing, LD exposure, revenue recognition
+(Ind AS 115 / AS 7) issues.</pre></article>
+<article class="p"><h3>7. From exception list to a well-written observation</h3><button class="copy">Copy</button><pre>Draft an internal audit observation in 5C format
+(Condition, Criteria, Cause, Consequence, Corrective action)
+plus Risk rating and Management response placeholder.
+
+Facts: vendor V031 &quot;Shree Ganesh Metal Pvt. Ltd.&quot; was created
+on 18-07-2025 by user PUR_BIKASH with the same PAN, GSTIN and
+bank account as existing vendor V001 &quot;Shri Ganesh Metals Pvt Ltd&quot;.
+Two advances of Rs 3.5 lakh and Rs 4.1 lakh were paid to V031
+with no invoice. Vendor creation SOP requires accounts approval.
+
+Tone: factual, non-accusatory, suitable for the audit committee.
+Do not conclude fraud; recommend investigation steps.</pre></article>
+<article class="p"><h3>8. Audit committee summary, then &quot;build me a tool&quot;</h3><button class="copy">Copy</button><pre>Attached is the exception report (Summary sheet) from our
+data analytics on FY 2025-26.
+Write a one-page summary for the Audit Committee:
+- top 5 issues by financial impact with Rs amounts
+- 3 control themes (e.g. vendor master, approvals, audit trail)
+- what management must do in 30 / 60 / 90 days
+Plain English, no jargon, no names of individuals.</pre></article>
+<article class="p"><h3>9. Audit committee summary, then &quot;build me a tool&quot;</h3><button class="copy">Copy</button><pre>[Claude Code - in a project folder]
+Read datasets/01_Aluminium_Brahmaputra_Alu_Systems.xlsx.
+Write a Python tool aluminium_audit.py that tests 100% of
+the data for: invoice gaps, duplicates, discounts &gt; 5%,
+cut-off, wrong GST type, duplicate vendors, vendor bank =
+employee bank, GSTIN checksum, 3-way match, GSTR-2B recon,
+split payments below Rs 2L, self-approved and late-night
+journals, yield &lt; 82%, and Benford&#x27;s law.
+Output one Excel report: Summary sheet + one sheet per test.
+Then run it and show me the summary.</pre></article>
+<article class="p"><h3>10. DPDP readiness as an internal audit area</h3><button class="copy">Copy</button><pre>Prepare a DPDP Act 2023 / DPDP Rules 2025 readiness audit checklist for a 150-bed private hospital in Assam. Columns: Area | Requirement (cite section/rule) | Evidence to inspect | Status (Y/N/Partial) | Observation. Flag where you are unsure of the exact rule number.</pre></article>
+<article class="p"><h3>11. Co-op Bank · IRAC &amp; evergreening</h3><button class="copy">Copy</button><pre>Attached: Loan_Book and Closed_Loans (synthetic / masked). As at 31-03-2026, recompute days past due from Overdue_Since and classify: &lt;=90 Standard, 91-455 Sub-Standard, &gt;455 Doubtful. List accounts where the computed class differs from Asset_Class_Reported, with indicative provision (10% / 25%). Then find customers whose old loan (DPD &gt; 30 at closure) was closed within 7 days of a new sanction (evergreening). Explain your method.</pre></article>
+<article class="p"><h3>12. Co-op Bank · KYC / AML red flags</h3><button class="copy">Copy</button><pre>Attached: KYC_Register (masked). Find: mobile numbers shared by 3+ customers, the same PAN under different customer IDs, and re-KYC overdue as at 31-03-2026 (High risk 2 yrs, Medium 8, Low 10 from Last_KYC_Date). Summarise by branch and risk category. Suggest 5 follow-up procedures.</pre></article>
+<article class="p"><h3>13. Hospital · revenue leakage</h3><button class="copy">Copy</button><pre>Attached: IPD_Bills, Consumables_Issue, TPA_Claims, Doctor_Payouts, Doctor_Master (masked). Find: discounts &gt; 10% not approved by MS_DR_BORA; consumables with Billed = N, by ward; average deduction % by payer; claims submitted &gt; 30 days after discharge; doctor payouts vs agreed revenue share. Quantify each in Rs and rank by impact.</pre></article>
+<article class="p"><h3>14. FMCG-Pharma · distributor audit</h3><button class="copy">Copy</button><pre>Attached: Sales_Invoices, Batch_Stock, Retailer_Master, Product_Master, Scheme_Master, Collections, Sales_Returns. Test: sales after batch expiry; Sch H sales to retailers after DL_Valid_Upto; free qty vs scheme entitlement; average cash deposit lag by salesman (policy: 2 days); receipt number gaps; credit notes without Godown_GRN_No. Which salesman needs a surprise cash count, and why?</pre></article>
+<article class="p"><h3>15. Claude Code · build your own tool</h3><button class="copy">Copy</button><pre>In this folder is &lt;client export&gt;.xlsx. Write a Python script that tests 100% of rows for: &lt;test 1 with exact criteria&gt;, &lt;test 2&gt;, &lt;test 3&gt;. Output an Excel report with a Summary sheet and one sheet per test. Explain every function in plain-English comments, run it, and show me the summary. Then convert the same tests into Excel formulas (no macros, Excel 2010 compatible).</pre></article>
+<article class="p"><h3>16. DPDP · mask before upload</h3><button class="copy">Copy</button><pre>python tools/dpdp_mask.py mask datasets/03_Hospital_Lohit_Care.xlsx
+# upload only outputs/*_MASKED.xlsx; keep *_KEY_DO_NOT_SHARE.csv on your machine
+python tools/dpdp_mask.py unmask claude_findings.txt outputs/03_Hospital_Lohit_Care_KEY_DO_NOT_SHARE.csv</pre></article>
+<p style="margin-top:30px;color:var(--muted)">Connect: <a href="https://www.linkedin.com/in/ankitjallan">linkedin.com/in/ankitjallan</a></p>
+</main>
+<script>document.querySelectorAll('.copy').forEach(b=>b.onclick=()=>{const t=b.nextElementSibling.innerText;
+(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(()=>{});b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)})</script>
+</body></html>
